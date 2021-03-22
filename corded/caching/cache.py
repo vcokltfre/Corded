@@ -4,21 +4,21 @@ from typing import Union, List, Dict
 
 class BaseCache:
     @abstractmethod
-    async def set(key: str, value: str, namespace: str = None) -> int:
+    async def set(key: str, value: str) -> int:
         pass
 
     @abstractmethod
-    async def get(key: str, namespace: str = None) -> Union[str, None]:
+    async def get(key: str) -> Union[str, None]:
         pass
 
     @abstractmethod
-    async def keys(pattern: str = None, namespace: str = None) -> List[str]:
+    async def keys(pattern: str = None) -> List[str]:
         pass
 
     @abstractmethod
-    async def items(pattern: str = None, namespace: str = None) -> Dict[str]:
+    async def items(pattern: str = None) -> Dict[str]:
         pass
 
     @abstractmethod
-    async def clear(namespace: str = None) -> int:
+    async def clear() -> int:
         pass
