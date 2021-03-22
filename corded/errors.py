@@ -1,0 +1,2 @@
+class CordedError(Exception):
+    pass
