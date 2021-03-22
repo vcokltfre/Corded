@@ -31,13 +31,8 @@ class BaseCache:
 
 class MemoryCache(BaseCache):
     def __init__(self, namespace: str = None):
-        """An im-memory cache for objects.
+        """An im-memory cache for objects."""
 
-        Args:
-            namespace (str, optional): The namespace to use for caching. Defaults to no namespace.
-        """
-
-        self.namespace = namespace or ""
         self._cache = {}
 
     def set(self, key: str, value: str) -> bool:
