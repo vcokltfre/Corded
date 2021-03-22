@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+
 class Route:
     def __init__(self, path: str, **params):
         """Represents a Discord API route, used for ratelimit handling.
