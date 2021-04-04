@@ -25,7 +25,7 @@ SOFTWARE.
 from datetime import datetime
 
 
-class Snowflake:
+class Object:
     def __init__(self, snowflake: int):
         self.snowflake = snowflake
 
