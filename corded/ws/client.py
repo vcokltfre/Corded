@@ -33,6 +33,15 @@ from corded.objects.partials import GetGatewayBot, SessionStartLimit
 
 class GatewayClient:
     def __init__(self, http, intents: int, shard_ids: list = None, shard_count: int = None, *, loop: AbstractEventLoop = None):
+        """A client to connect to the Discord gateway.
+
+        Args:
+            http ([type]): The HTTP client to use for API requests.
+            intents (int): The intents to connect with.
+            shard_ids (list, optional): The shard IDs to connect with. Defaults to [0].
+            shard_count (int, optional): The total number of shards being used. Defaults to 1.
+            loop (AbstractEventLoop, optional): The event loop to use. Defaults to the result of asyncio.get_event_loop.
+        """
         self.http = http
         self.intents = intents
 

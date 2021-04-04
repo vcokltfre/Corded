@@ -38,7 +38,7 @@ class Shard:
 
         Args:
             id (int): The shard's ID.
-            parent ([type]): The shard's parent gateway shard manager.
+            parent (corded.ws.GatewayClient): The shard's parent gateway shard manager.
             loop (AbstractEventLoop): The even loop to use.
         """
 
