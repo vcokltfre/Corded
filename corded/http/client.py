@@ -160,6 +160,21 @@ class HTTPClient:
 
         raise self.errors.get(status, self.errors["_"])(response)
 
+    async def spawn_ws(self, url: str):
+        if not self.session or self.session.closed:
+            self.session = ClientSession(headers=self.headers)
+
+        args = {
+            "max_msg_size": 0,
+            "timeout": 60,
+            "autoclose": False,
+            "headers": {
+                "User-Agent": self.default_headers["User-Agent"]
+            },
+        }
+
+        return await self.session.ws_connect(url, **args)
+
     async def close(self):
         await self.session.close()
 
