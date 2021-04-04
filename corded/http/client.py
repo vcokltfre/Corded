@@ -118,8 +118,8 @@ class HTTPClient:
             status = response.status
             headers = response.headers
 
-            rl_reset_after = float(headers.get("X-RateLimit-Reset-After"))
-            rl_bucket_remaining = int(headers.get("X-RateLimit-Remaining"))
+            rl_reset_after = float(headers.get("X-RateLimit-Reset-After", 0))
+            rl_bucket_remaining = int(headers.get("X-RateLimit-Remaining", 1))  # Default here is for non authenticated (and hence non ratelimited) endpoints
             rl_sleep_for = 0
 
             if status != 429 and rl_bucket_remaining == 0:
