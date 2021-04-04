@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Union, List, Dict
+from typing import Union, List, Dict, Any
 
 
 class BaseCache:
@@ -19,7 +19,7 @@ class BaseCache:
         pass
 
     @abstractmethod
-    async def items(pattern: str = None) -> Dict[str]:
+    async def items(pattern: str = None) -> Dict[str, Any]:
         """Get a dictionary of items, where the key matches an optional pattern."""
         pass
 
@@ -47,7 +47,7 @@ class MemoryCache(BaseCache):
             return list(self._cache.keys())
         return [key for key in self._cache.keys() if pattern in key]
 
-    def items(self, pattern: str = None) -> Dict[str]:
+    def items(self, pattern: str = None) -> Dict[str, Any]:
         if not pattern:
             return self._cache
         return dict((k, v) for k, v in self._cache.items() if pattern in k)
