@@ -37,7 +37,7 @@ class MemoryCache(BaseCache):
 
     def set(self, key: str, value: str) -> bool:
         self._cache[key] = value
-        return 1
+        return True
 
     def get(self, key: str) -> Union[str, None]:
         return self._cache.get(key)
@@ -54,4 +54,4 @@ class MemoryCache(BaseCache):
 
     def clear(self) -> bool:
         self._cache = {}
-        return 1
+        return True
