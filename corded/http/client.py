@@ -31,6 +31,8 @@ from corded.errors import HTTPError, BadRequest, Unauthorized, Forbidden, NotFou
 from .ratelimiter import Ratelimiter
 from .route import Route
 
+import corded.objects.partials as p
+
 
 class HTTPClient:
     def __init__(self, token: str, *, url: str = None, loop: AbstractEventLoop = None):
@@ -157,3 +159,17 @@ class HTTPClient:
             raise DiscordServerError(response)
 
         raise self.errors.get(status, self.errors["_"])(response)
+
+    async def get_gateway(self) -> p.GetGateway:
+        route = Route("/gateway")
+        response = await self.request("get", route)
+
+        return p.GetGateway(**response)
+
+    async def get_gateway_bot(self) -> p.GetGatewayBot:
+        route = Route("/gateway/bot")
+        response = await self.request("get", route)
+
+        session_start_limit = p.SessionStartLimit(**response["session_start_limit"])
+
+        return p.GetGatewayBot(response["url"], response["shards"], session_start_limit)
