@@ -27,6 +27,8 @@ from asyncio import AbstractEventLoop, sleep
 from sys import platform
 from time import time
 
+from .ratelimiter import Ratelimiter
+
 from corded.objects.constants import GatewayOps, GatewayCloseCodes as CloseCodes
 
 
@@ -56,6 +58,8 @@ class Shard:
         self.recieved_ack = True
         self.failed_heartbeats = 0
         self.latency = None
+
+        self.send_limiter = Ratelimiter(120, 60)
 
     async def spawn_ws(self):
         """Spawn the websocket connection to the gateway."""
@@ -88,12 +92,9 @@ class Shard:
             data (dict): The data to send.
         """
 
+        await self.send_limiter.wait()
+
         await self.parent.dispatch_send(data)
-
-        # TODO: ratelimiting
-        # TODO: logging
-        # TODO: dispatch send events
-
         await self.ws.send_json(data)
 
     async def identify(self):
