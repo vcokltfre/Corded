@@ -160,6 +160,9 @@ class HTTPClient:
 
         raise self.errors.get(status, self.errors["_"])(response)
 
+    async def close(self):
+        await self.session.close()
+
     async def get_gateway(self) -> p.GetGateway:
         route = Route("/gateway")
         response = await self.request("get", route)
