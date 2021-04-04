@@ -88,6 +88,8 @@ class Shard:
             data (dict): The data to send.
         """
 
+        await self.parent.dispatch_send(data)
+
         # TODO: ratelimiting
         # TODO: logging
         # TODO: dispatch send events
@@ -141,7 +143,7 @@ class Shard:
     async def dispatch(self, data: dict):
         """Dispatch events."""
 
-        await self.parent.dispatch(data)
+        await self.parent.dispatch_send(data)
 
         op = data["op"]
 
