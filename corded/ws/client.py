@@ -64,9 +64,9 @@ class GatewayClient:
             await limiter.wait()
             await shard.connect()
 
-    async def dispatch(self, event: str, *args, **kwargs):
+    async def dispatch(self, event: str, data: dict):
         for listener in self.listeners[event]:
-            self.loop.create_task(listener(*args, **kwargs))
+            self.loop.create_task(listener(data))
 
     async def dispatch_recv(self, data: dict):
         await self.dispatch("gateway_receive", data)
