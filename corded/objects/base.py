@@ -35,7 +35,7 @@ class Object:
             snowflake (int): The snowflake ID of the object.
         """
 
-        self.snowflake = snowflake
+        self.snowflake = self.id = snowflake
 
         timestamp, worker, process, increment = self.deconstruct(snowflake)
 
