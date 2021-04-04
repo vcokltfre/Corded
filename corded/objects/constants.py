@@ -51,7 +51,7 @@ class GatewayOps(Enum):
     HELLO = 10
     ACK = 11
 
-class GatewayCloseCode(Enum):
+class GatewayCloseCodes(Enum):
     UNKNOWN_ERROR = 4000
     UNKNOWN_OPCODE = 4001
     DECODE_ERROR = 4002
