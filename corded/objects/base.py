@@ -27,6 +27,14 @@ from datetime import datetime
 
 class Object:
     def __init__(self, snowflake: int):
+        """Represents a basic Discord object that has an ID.
+
+        Allows for easy accessing of all parts of the ID and timestamp.
+
+        Args:
+            snowflake (int): The snowflake ID of the object.
+        """
+
         self.snowflake = snowflake
 
         timestamp, worker, process, increment = self.deconstruct(snowflake)
@@ -38,6 +46,15 @@ class Object:
 
     @staticmethod
     def deconstruct(snowflake: int):
+        """Deconstruct a snowflake into its component parts.
+
+        Args:
+            snowflake (int): The snowflake to deconstruct.
+
+        Returns:
+            Tuple[int, int, int, int]: The parts of the snowflake.
+        """
+
         timestamp = (snowflake >> 22) + 1420070400000
         worker = (snowflake & 0x3E0000) >> 17
         process = (snowflake & 0x1F000) >> 12
@@ -47,4 +64,6 @@ class Object:
 
     @property
     def isotime(self):
+        """Return the ISO timestamp of the snowflake."""
+
         return datetime.fromtimestamp(self.timestamp).isoformat()
