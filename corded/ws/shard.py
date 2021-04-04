@@ -143,7 +143,7 @@ class Shard:
     async def dispatch(self, data: dict):
         """Dispatch events."""
 
-        await self.parent.dispatch_send(data)
+        await self.parent.dispatch_recv(data)
 
         op = data["op"]
 
