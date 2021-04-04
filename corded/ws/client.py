@@ -62,5 +62,12 @@ class GatewayClient:
     async def dispatch_recv(self, data: dict):
         await self.dispatch("gateway_receive", data)
 
+        if event := data.get("t"):
+            await self.dispatch(event.lower(), data)
+        else:
+            await self.dispatch(f"op_{data['op']}", data)
+
     async def dispatch_send(self, data: dict):
         await self.dispatch("gateway_send", data)
+
+        await self.dispatch(f"op_{data['op']}", data)
