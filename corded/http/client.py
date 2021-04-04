@@ -169,7 +169,7 @@ class HTTPClient:
             "timeout": 60,
             "autoclose": False,
             "headers": {
-                "User-Agent": self.default_headers["User-Agent"]
+                "User-Agent": self.headers["User-Agent"]
             },
         }
 
