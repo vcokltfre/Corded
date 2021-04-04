@@ -133,7 +133,7 @@ class HTTPClient:
                 if not headers.get("Via"):
                     raise TooManyRequests(429, response, "Ratelimited by cloudflare.")
 
-                data = await self.response(response, "json")
+                data = await self.response_as(response, "json")
                 is_global = data.get("global", False)
                 rl_sleep_for = data.get("retry_after")
 
