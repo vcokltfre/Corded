@@ -1,3 +1,5 @@
+from enum import Enum
+
 AUDIT_LOG_EVENTS = {
     1: "GUILD_UPDATE",
     10: "CHANNEL_CREATE",
@@ -36,7 +38,7 @@ AUDIT_LOG_EVENTS = {
     82: "INTEGRATION_DELETE",
 }
 
-class GatewayOps:
+class GatewayOps(Enum):
     DISPATCH = 0
     HEARTBEAT = 1
     IDENTIFY = 2
