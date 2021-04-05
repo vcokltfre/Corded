@@ -23,9 +23,17 @@ SOFTWARE.
 """
 
 from re import compile
+from typing import Union
 
 
 INT = compile(r"^\d+$")
 
-def int_types(data: dict):
-    return {key: (value if not (isinstance(value, str) and INT.match(value)) else int(value)) for key, value in data.items()}
+def int_types(data: Union[dict, list, int, str, bool, float]):
+    if isinstance(data, (int, str, bool, float)):
+        if isinstance(data, str) and INT.match(data):
+            return int(data)
+        return data
+    if isinstance(data, dict):
+        return {k: int_types(v) for k, v in data.items()}
+    if isinstance(data, list):
+        return [int_types(v) for v in data]
