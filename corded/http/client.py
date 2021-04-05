@@ -76,7 +76,7 @@ class HTTPClient:
         """
 
         if format == "raw":
-            return response.read()
+            return await response.read()
         if format == "json":
             return await response.json()
         if format == "text":
@@ -86,6 +86,8 @@ class HTTPClient:
                 return await response.json()
             except:
                 return await response.text()
+        if format == "response":
+            return response
         raise ValueError("Format must be one of 'json', 'text', 'auto', 'raw'")
 
     async def request(self, method: str, route: Route, *, attempts: int = None, expect: str = None, **params):
