@@ -4,27 +4,27 @@ from typing import Union, List, Dict, Any
 
 class BaseCache:
     @abstractmethod
-    async def set(key: str, value: str) -> bool:
+    async def set(self, key: str, value: str) -> bool:
         """Set a key to a given value."""
         pass
 
     @abstractmethod
-    async def get(key: str) -> Union[str, None]:
+    async def get(self, key: str) -> Union[str, None]:
         """Get the value of a given key."""
         pass
 
     @abstractmethod
-    async def keys(pattern: str = None) -> List[str]:
+    async def keys(self, pattern: str = None) -> List[str]:
         """Get all keys matching an optional pattern."""
         pass
 
     @abstractmethod
-    async def items(pattern: str = None) -> Dict[str, Any]:
+    async def items(self, pattern: str = None) -> Dict[str, Any]:
         """Get a dictionary of items, where the key matches an optional pattern."""
         pass
 
     @abstractmethod
-    async def clear() -> bool:
+    async def clear(self) -> bool:
         """Clear the cache."""
         pass
 
