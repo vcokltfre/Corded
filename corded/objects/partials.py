@@ -22,7 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+
+class Generator:
+    def __init__(self, obj):
+        self.obj = obj
+
+    def __call__(self):
+        return self.obj
 
 
 @dataclass
@@ -41,3 +49,16 @@ class GetGatewayBot:
     url: str
     shards: int
     session_start_limit: SessionStartLimit
+
+@dataclass
+class User:
+    id: int
+    username: str
+    discriminator: int
+    avatar: str = field(default_factory=Generator(None))
+    bot: bool = field(default_factory=bool)
+    system: bool = field(default_factory=bool)
+    mfa_enabled: bool = field(default_factory=bool)
+    flags: int = field(default_factory=int)
+    premium_type: int = field(default_factory=int)
+    public_flags: int = field(default_factory=int)
