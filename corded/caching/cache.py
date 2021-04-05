@@ -35,23 +35,23 @@ class MemoryCache(BaseCache):
 
         self._cache = {}
 
-    def set(self, key: str, value: str) -> bool:
+    async def set(self, key: str, value: str) -> bool:
         self._cache[key] = value
         return True
 
-    def get(self, key: str) -> Union[str, None]:
+    async def get(self, key: str) -> Union[str, None]:
         return self._cache.get(key)
 
-    def keys(self, pattern: str = None) -> List[str]:
+    async def keys(self, pattern: str = None) -> List[str]:
         if not pattern:
             return list(self._cache.keys())
         return [key for key in self._cache.keys() if pattern in key]
 
-    def items(self, pattern: str = None) -> Dict[str, Any]:
+    async def items(self, pattern: str = None) -> Dict[str, Any]:
         if not pattern:
             return self._cache
         return dict((k, v) for k, v in self._cache.items() if pattern in k)
 
-    def clear(self) -> bool:
+    async def clear(self) -> bool:
         self._cache = {}
         return True
