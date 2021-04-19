@@ -149,7 +149,7 @@ class Shard:
         op = data["op"]
 
         if op == GatewayOps.HELLO:
-            self.loop.create_task(self.start_heartbeater(data["d"]["heartbeat_interval"]))
+            self.loop.create_task(self.start_pacemaker(data["d"]["heartbeat_interval"]))
             await self.identify()
         elif op == GatewayOps.ACK:
             self.latency = time() - self.last_heartbeat_send
@@ -201,7 +201,7 @@ class Shard:
 
         await self.handle_disconnect(self.ws.close_code)
 
-    async def start_heartbeater(self, delay: float):
+    async def start_pacemaker(self, delay: float):
         """A loop to constantly heartbeat at an interval given by the gateway."""
 
         delay = delay / 1000
