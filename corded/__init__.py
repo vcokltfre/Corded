@@ -13,6 +13,8 @@ from .errors import (
 )
 from .constants import VERSION as __version__
 from .objects import Object
+from .client import CordedClient
+from .helpers import BitField
 
 __all__ = (
     HTTPClient,
@@ -29,5 +31,7 @@ __all__ = (
     Object,
     GatewayClient,
     Shard,
+    CordedClient,
+    BitField,
     __version__,
 )
