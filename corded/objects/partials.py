@@ -25,14 +25,6 @@ SOFTWARE.
 from dataclasses import dataclass, field
 
 
-class Generator:
-    def __init__(self, obj):
-        self.obj = obj
-
-    def __call__(self):
-        return self.obj
-
-
 @dataclass
 class GetGateway:
     url: str
@@ -55,7 +47,7 @@ class User:
     id: int
     username: str
     discriminator: int
-    avatar: str = field(default_factory=Generator(None))
+    avatar: str = field(default=None)
     bot: bool = field(default_factory=bool)
     system: bool = field(default_factory=bool)
     mfa_enabled: bool = field(default_factory=bool)
