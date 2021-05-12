@@ -49,32 +49,3 @@ class CordedClient:
 
         self.http = HTTPClient(token, loop=self.loop)
         self.gateway = GatewayClient(self.http, self.intents, shard_ids, shard_count, loop=self.loop)
-
-        self.listeners = defaultdict(list)
-
-        for k, v in {
-            "ready": self.on_ready,
-            "op_6": self.on_resume,
-        }.items():
-            self.gateway.listeners[k].append(v)
-
-    async def dispatch(self, event: str, *args, **kwargs):
-        for listener in self.listeners[event]:
-            self.loop.create_task(listener(*args, **kwargs))
-
-    async def on_ready(self, _, data: dict):
-        await self.dispatch("ready")
-
-    async def on_resume(self, _, data: dict):
-        await self.dispatch("resumed")
-
-    async def on_user_update(self, _, data: dict):
-        user = p.User(**data)
-
-        before = await self.cache.get(str(user.id))
-
-        await self.dispatch(
-            "user_update",
-            before,
-            user,
-        )
