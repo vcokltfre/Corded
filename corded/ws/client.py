@@ -67,7 +67,7 @@ class GatewayClient:
 
     async def dispatch(self, event: str, raw_data: dict):
         for listener in self.listeners[event]:
-            self.loop.create_task(listener(raw_data, int_types(raw_data["d"])))
+            self.loop.create_task(listener(int_types(raw_data["d"])))
 
     async def dispatch_recv(self, data: dict):
         await self.dispatch("gateway_receive", data)
