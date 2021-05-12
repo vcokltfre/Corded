@@ -27,13 +27,12 @@ from collections import defaultdict
 
 from .http import HTTPClient
 from .ws import GatewayClient
-from .caching import MemoryCache, BaseCache
 
 from corded.objects import partials as p
 
 
 class CordedClient:
-    def __init__(self, token: str, intents: int, *, cache: BaseCache = None, shard_ids: int = None, shard_count: int = None, loop: AbstractEventLoop = None):
+    def __init__(self, token: str, intents: int, *, shard_ids: int = None, shard_count: int = None, loop: AbstractEventLoop = None):
         """A combined client that can make HTTP requests and connect to the gateway.
 
         Args:
@@ -44,7 +43,6 @@ class CordedClient:
 
         self.token = token
         self.intents = intents
-        self.cache = cache or MemoryCache()
         self.loop = loop or get_event_loop()
 
         self.http = HTTPClient(token, loop=self.loop)
