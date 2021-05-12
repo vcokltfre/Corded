@@ -1,6 +1,18 @@
 from .http import HTTPClient, Route
-from .errors import CordedError, HTTPError, BadRequest, Unauthorized, Forbidden, NotFound, PayloadTooLarge, TooManyRequests, DiscordServerError
+from .ws import GatewayClient, Shard
+from .errors import (
+    CordedError,
+    HTTPError,
+    BadRequest,
+    Unauthorized,
+    Forbidden,
+    NotFound,
+    PayloadTooLarge,
+    TooManyRequests,
+    DiscordServerError,
+)
 from .constants import VERSION as __version__
+from .objects import Object
 
 __all__ = (
     HTTPClient,
@@ -14,5 +26,8 @@ __all__ = (
     PayloadTooLarge,
     TooManyRequests,
     DiscordServerError,
+    Object,
+    GatewayClient,
+    Shard,
     __version__,
 )
