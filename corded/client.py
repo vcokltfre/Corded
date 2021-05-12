@@ -49,3 +49,8 @@ class CordedClient:
 
         self.http = HTTPClient(token, loop=self.loop)
         self.gateway = GatewayClient(self.http, self.intents, shard_ids, shard_count, loop=self.loop)
+
+    def start(self):
+        """Make a blocking call to start the Gateway connection."""
+
+        self.loop.run_until_complete(self.gateway.start())
