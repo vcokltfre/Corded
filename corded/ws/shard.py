@@ -23,7 +23,7 @@ SOFTWARE.
 """
 
 from aiohttp import WSMessage, WSMsgType
-from asyncio import AbstractEventLoop, sleep
+from asyncio import AbstractEventLoop, sleep, Task
 from sys import platform
 from time import time
 
@@ -59,6 +59,8 @@ class Shard:
         self.failed_heartbeats = 0
         self.latency = None
 
+        self.pacemaker: Task = None
+
         self.send_limiter = Ratelimiter(120, 60)
 
     async def spawn_ws(self):
@@ -84,6 +86,9 @@ class Shard:
 
         if self.ws and not self.ws.closed:
             await self.ws.close()
+
+        if self.pacemaker and not self.pacemaker.cancelled():
+            self.pacemaker.cancel()
 
     async def send(self, data: dict):
         """Send data to the gateway.
@@ -149,7 +154,7 @@ class Shard:
         op = data["op"]
 
         if op == GatewayOps.HELLO:
-            self.loop.create_task(self.start_pacemaker(data["d"]["heartbeat_interval"]))
+            self.pacemaker = self.loop.create_task(self.start_pacemaker(data["d"]["heartbeat_interval"]))
             await self.identify()
         elif op == GatewayOps.ACK:
             self.latency = time() - self.last_heartbeat_send
