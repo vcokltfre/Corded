@@ -44,6 +44,10 @@ class Object:
         self.process = process
         self.increment = increment
 
+    def __repr__(self):
+        return f"<{self.__class__.__qualname__} timestamp={self.timestamp}" \
+            f" worker={self.worker} process={self.process} increment={self.increment}>"
+
     @staticmethod
     def deconstruct(snowflake: int):
         """Deconstruct a snowflake into its component parts.
