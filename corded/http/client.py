@@ -24,6 +24,7 @@ SOFTWARE.
 
 from asyncio import AbstractEventLoop, get_event_loop, sleep
 from aiohttp import ClientSession, ClientResponse
+from typing import Literal
 
 from corded.constants import API_URL, VERSION
 from corded.errors import HTTPError, BadRequest, Unauthorized, Forbidden, NotFound, PayloadTooLarge, TooManyRequests, DiscordServerError
@@ -32,6 +33,9 @@ from .ratelimiter import Ratelimiter
 from .route import Route
 
 import corded.objects.partials as p
+
+
+ResponseFormat = Literal["raw", "text", "json", "auto", "response"]
 
 
 class HTTPClient:
@@ -67,7 +71,7 @@ class HTTPClient:
         }
 
     @staticmethod
-    async def response_as(response: ClientResponse, format: str = None):
+    async def response_as(response: ClientResponse, format: ResponseFormat = "json"):
         """Return a ClientResponse in a given format.
 
         Args:
@@ -90,7 +94,7 @@ class HTTPClient:
             return response
         raise ValueError("Format must be one of 'json', 'text', 'auto', 'raw'")
 
-    async def request(self, method: str, route: Route, *, attempts: int = None, expect: str = None, **params):
+    async def request(self, method: str, route: Route, *, attempts: int = None, expect: ResponseFormat = "json", **params):
         """Make a Discord API request.
 
         Args:
@@ -101,7 +105,6 @@ class HTTPClient:
         """
 
         attempts = attempts or 3
-        expect = expect or "json"
 
         if not self.session or self.session.closed:
             self.session = ClientSession(headers=self.headers)
