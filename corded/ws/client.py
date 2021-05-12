@@ -73,7 +73,7 @@ class GatewayClient:
             data = int_types(raw_data["d"])
 
         for middleware in self.dispatch_middleware:
-            data = await middleware(data)
+            data = await middleware(event, data)
 
         for listener in self.listeners[event]:
             self.loop.create_task(listener(data))
