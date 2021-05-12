@@ -66,8 +66,12 @@ class GatewayClient:
             await shard.connect()
 
     async def dispatch(self, event: str, raw_data: dict):
+        if event in ["gateway_receive", "gateway_send"]:
+            data = int_types(raw_data)
+        else:
+            data = int_types(raw_data["d"])
         for listener in self.listeners[event]:
-            self.loop.create_task(listener(int_types(raw_data["d"])))
+            self.loop.create_task(listener(data))
 
     async def dispatch_recv(self, data: dict):
         await self.dispatch("gateway_receive", data)
