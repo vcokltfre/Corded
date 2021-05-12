@@ -54,3 +54,9 @@ class CordedClient:
         """Make a blocking call to start the Gateway connection."""
 
         self.loop.run_until_complete(self.gateway.start())
+
+    def on(self, event: str = None):
+        def wrapper(func):
+            self.gateway.listeners[event].append(func)
+            return func
+        return wrapper
