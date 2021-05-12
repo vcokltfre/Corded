@@ -1,4 +1,5 @@
-from enum import Enum
+from enum import IntFlag
+
 
 AUDIT_LOG_EVENTS = {
     1: "GUILD_UPDATE",
@@ -38,7 +39,8 @@ AUDIT_LOG_EVENTS = {
     82: "INTEGRATION_DELETE",
 }
 
-class GatewayOps:
+
+class GatewayOps(IntFlag):
     DISPATCH = 0
     HEARTBEAT = 1
     IDENTIFY = 2
@@ -51,7 +53,8 @@ class GatewayOps:
     HELLO = 10
     ACK = 11
 
-class GatewayCloseCodes:
+
+class GatewayCloseCodes(IntFlag):
     UNKNOWN_ERROR = 4000
     UNKNOWN_OPCODE = 4001
     DECODE_ERROR = 4002
