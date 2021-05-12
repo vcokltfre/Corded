@@ -54,6 +54,7 @@ class GatewayClient:
         self.shards = [Shard(id, self, self.loop) for id in self.shard_ids]
 
         self.listeners = defaultdict(list)
+        self.dispatch_middleware = []
 
     async def start(self):
         gateway: GetGatewayBot = await self.http.get_gateway_bot()
@@ -70,6 +71,10 @@ class GatewayClient:
             data = int_types(raw_data)
         else:
             data = int_types(raw_data["d"])
+
+        for middleware in self.dispatch_middleware:
+            data = await middleware(data)
+
         for listener in self.listeners[event]:
             self.loop.create_task(listener(data))
 

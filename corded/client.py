@@ -58,3 +58,7 @@ class CordedClient:
             self.gateway.listeners[event].append(func)
             return func
         return wrapper
+
+    def middleware(self, func):
+        self.gateway.dispatch_middleware.append(func)
+        return func
