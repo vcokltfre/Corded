@@ -78,7 +78,7 @@ class GatewayClient:
             data = await middleware(event, data)
 
         for listener in self.listeners[event]:
-            self.loop.create_task(listener(data))
+            self.loop.create_task(listener(event, data))
 
     async def dispatch_recv(self, data: dict):
         await self.dispatch("gateway_receive", data)
