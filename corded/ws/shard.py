@@ -99,7 +99,7 @@ class Shard:
 
         await self.send_limiter.wait()
 
-        await self.parent.dispatch_send(data)
+        self.loop.create_task(self.parent.dispatch_send(data))
         await self.ws.send_json(data)
 
     async def identify(self):
