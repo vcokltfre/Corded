@@ -111,14 +111,14 @@ class HTTPClient:
 
         bucket = route.bucket
 
-        headers = {}
+        request_headers = {}
         if "reason" in params:
-            headers["X-Audit-Log-Reason"] = params.pop("reason")
+            request_headers["X-Audit-Log-Reason"] = params.pop("reason")
 
         for i in range(attempts):
             await self.ratelimiter.acquire(bucket)
 
-            response = await self.session.request(method, self.url + route.route, **params)
+            response = await self.session.request(method, self.url + route.route, headers=request_headers, **params)
 
             status = response.status
             headers = response.headers
