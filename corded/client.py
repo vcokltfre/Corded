@@ -23,12 +23,10 @@ SOFTWARE.
 """
 
 from asyncio import AbstractEventLoop, get_event_loop
-from collections import defaultdict
+from typing import Union, List
 
 from .http import HTTPClient
 from .ws import GatewayClient
-
-from corded.objects import partials as p
 
 
 class CordedClient:
@@ -53,9 +51,13 @@ class CordedClient:
 
         self.loop.run_until_complete(self.gateway.start())
 
-    def on(self, event: str = None):
+    def on(self, *events: List[str]):
         def wrapper(func):
-            self.gateway.listeners[event].append(func)
+            nonlocal events
+            if not events:
+                events = [func.__name__]
+            for event in events:
+                self.gateway.listeners[event].append(func)
             return func
         return wrapper
 
