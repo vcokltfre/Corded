@@ -62,6 +62,12 @@ class GatewayClient:
 
         limiter = Ratelimiter(limit.max_concurrency, 5)
 
+        await self.dispatch("startup", {
+            "intents": self.intents,
+            "shards": self.shard_ids,
+            "shard_count": self.shard_count,
+        })
+
         for shard in self.shards:
             await limiter.wait()
             await shard.connect()
