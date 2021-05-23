@@ -56,6 +56,9 @@ class GatewayClient:
         self.listeners = defaultdict(list)
         self.dispatch_middleware = []
 
+    async def panic(self, code):
+        print(code)  # TODO: Handle panic properly
+
     async def start(self):
         gateway: GetGatewayBot = await self.http.get_gateway_bot()
         limit: SessionStartLimit = gateway.session_start_limit
