@@ -75,8 +75,10 @@ class GatewayClient:
     async def dispatch(self, event: str, raw_data: dict):
         if event in ["gateway_receive", "gateway_send"]:
             data = raw_data
+        elif d := raw_data.get("d"):
+            data = d
         else:
-            data = raw_data["d"]
+            data = raw_data
 
         data = int_types(data)
 
