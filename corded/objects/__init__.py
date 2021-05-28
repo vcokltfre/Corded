@@ -23,8 +23,10 @@ SOFTWARE.
 """
 
 from .base import Object
+from .gateway import GatewayEvent
 
 
 __all__ = (
     Object,
+    GatewayEvent,
 )
