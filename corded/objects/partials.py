@@ -41,16 +41,3 @@ class GetGatewayBot:
     url: str
     shards: int
     session_start_limit: SessionStartLimit
-
-@dataclass
-class User:
-    id: int
-    username: str
-    discriminator: int
-    avatar: str = field(default=None)
-    bot: bool = field(default_factory=bool)
-    system: bool = field(default_factory=bool)
-    mfa_enabled: bool = field(default_factory=bool)
-    flags: int = field(default_factory=int)
-    premium_type: int = field(default_factory=int)
-    public_flags: int = field(default_factory=int)
