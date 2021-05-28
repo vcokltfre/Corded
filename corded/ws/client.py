@@ -28,8 +28,8 @@ from collections import defaultdict
 from .shard import Shard
 from .ratelimiter import Ratelimiter
 
+from corded.objects.gateway import GatewayEvent
 from corded.objects.partials import GetGatewayBot, SessionStartLimit
-from corded.helpers import int_types
 
 
 class GatewayClient:
@@ -65,41 +65,29 @@ class GatewayClient:
 
         limiter = Ratelimiter(limit.max_concurrency, 5)
 
-        await self.dispatch("startup", {"d": {
-            "intents": self.intents,
-            "shards": self.shard_ids,
-            "shard_count": self.shard_count,
-        }})
-
         for shard in self.shards:
             await limiter.wait()
             await shard.connect()
 
-    async def dispatch(self, event: str, raw_data: dict):
-        if event in ["gateway_receive", "gateway_send"]:
-            data = raw_data
-        elif d := raw_data.get("d"):
-            data = d
-        else:
-            data = raw_data
-
-        data = int_types(data)
-
+    async def dispatch(self, event: GatewayEvent):
         for middleware in self.dispatch_middleware:
-            data = await middleware(event, data)
+            event = await middleware(event)
 
-        for listener in self.listeners[event]:
-            self.loop.create_task(listener(event, data))
+        all_listeners = [
+            *self.listeners[event.dispatch_name],
+            *(
+                self.listeners["gateway_send"] if
+                event.direction == "outbound" else
+                self.listeners["gateway_receive"]
+            ),
+            *self.listeners["*"]
+        ]
+
+        for listener in all_listeners:
+            self.loop.create_task(listener(event))
 
     async def dispatch_recv(self, data: dict):
-        await self.dispatch("gateway_receive", data)
-
-        if event := data.get("t"):
-            await self.dispatch(event.lower(), data)
-        else:
-            await self.dispatch(f"op_{data['op']}", data)
+        await self.dispatch(GatewayEvent("inbound", **data))
 
     async def dispatch_send(self, data: dict):
-        await self.dispatch("gateway_send", data)
-
-        await self.dispatch(f"op_{data['op']}", data)
+        await self.dispatch(GatewayEvent("outbound", **data))
