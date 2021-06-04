@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Any, Literal, Optional, Union
 
 from corded.helpers import int_types
-from corded.ws.shard import Shard
+import corded
 
 
 Direction = Union[Literal["inbound"], Literal["outbound"]]
@@ -10,7 +10,7 @@ Direction = Union[Literal["inbound"], Literal["outbound"]]
 
 @dataclass
 class GatewayEvent:
-    shard: Shard
+    shard: "corded.ws.shard.Shard"
     direction: Direction
     op: int
     d: Optional[Any]
