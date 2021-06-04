@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from asyncio import AbstractEventLoop, get_event_loop
+from asyncio import AbstractEventLoop, get_event_loop, sleep
 from collections import defaultdict
 
 from .shard import Shard
@@ -67,7 +67,10 @@ class GatewayClient:
 
         for shard in self.shards:
             await limiter.wait()
-            await shard.connect()
+            self.loop.create_task(shard.connect())
+
+        while True:
+            await sleep(0)
 
     async def dispatch(self, event: GatewayEvent):
         for middleware in self.dispatch_middleware:

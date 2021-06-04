@@ -63,6 +63,9 @@ class Shard:
 
         self.send_limiter = Ratelimiter(120, 60)
 
+    def __repr__(self) -> str:
+        return f"<Shard id={self.id} seq={self.seq}>"
+
     async def spawn_ws(self):
         """Spawn the websocket connection to the gateway."""
 
