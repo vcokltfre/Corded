@@ -99,7 +99,7 @@ class Shard:
 
         await self.send_limiter.wait()
 
-        self.loop.create_task(self.parent.dispatch_send(data))
+        self.loop.create_task(self.parent.dispatch_send(self.id, data))
         await self.ws.send_json(data)
 
     async def identify(self):
@@ -149,7 +149,7 @@ class Shard:
     async def dispatch(self, data: dict):
         """Dispatch events."""
 
-        await self.parent.dispatch_recv(data)
+        await self.parent.dispatch_recv(self.id, data)
 
         op = data["op"]
 

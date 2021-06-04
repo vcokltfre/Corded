@@ -86,8 +86,8 @@ class GatewayClient:
         for listener in all_listeners:
             self.loop.create_task(listener(event))
 
-    async def dispatch_recv(self, data: dict):
-        await self.dispatch(GatewayEvent("inbound", **data))
+    async def dispatch_recv(self, shard: Shard, data: dict):
+        await self.dispatch(GatewayEvent(shard, "inbound", **data))
 
-    async def dispatch_send(self, data: dict):
-        await self.dispatch(GatewayEvent("outbound", **data))
+    async def dispatch_send(self, shard: Shard, data: dict):
+        await self.dispatch(GatewayEvent(shard, "outbound", **data))
