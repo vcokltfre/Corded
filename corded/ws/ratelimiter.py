@@ -23,11 +23,11 @@ SOFTWARE.
 """
 
 from time import time
-from asyncio import sleep
+from asyncio import AbstractEventLoop, Semaphore, sleep
 
 
 class Ratelimiter:
-    def __init__(self, rate: int, per: int):
+    def __init__(self, rate: int, per: int, loop: AbstractEventLoop):
         """A ratelimiter to prevent making too many requests to the gateway.
 
         Args:
@@ -35,22 +35,15 @@ class Ratelimiter:
             per (int): The interval for requests.
         """
 
-        self.rate = rate
         self.per = per
+        self.loop = loop
+
         self.current = 0
         self.current_t = time()
 
+        self.lock = Semaphore(rate)
+
     async def wait(self):
-        if self.current_t + 60 < time():
-            self.current = 1
-            self.current_t = time()
-            return
+        await self.lock.acquire()
 
-        if self.current < self.rate:
-            self.current += 1
-            return
-
-        await sleep(time() - self.current_t)
-        self.current = 1
-        self.current_t = time()
-        return
+        self.loop.call_later(self.per, self.lock.release)

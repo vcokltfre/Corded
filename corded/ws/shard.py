@@ -61,7 +61,7 @@ class Shard:
 
         self.pacemaker: Task = None
 
-        self.send_limiter = Ratelimiter(120, 60)
+        self.send_limiter = Ratelimiter(120, 60, self.loop)
 
     def __repr__(self) -> str:
         return f"<Shard id={self.id} seq={self.seq}>"

@@ -63,7 +63,7 @@ class GatewayClient:
         gateway: GetGatewayBot = await self.http.get_gateway_bot()
         limit: SessionStartLimit = gateway.session_start_limit
 
-        limiter = Ratelimiter(limit.max_concurrency, 5)
+        limiter = Ratelimiter(limit.max_concurrency, 5, self.loop)
 
         for shard in self.shards:
             await limiter.wait()
