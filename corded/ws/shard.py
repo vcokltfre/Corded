@@ -220,9 +220,8 @@ class Shard:
             if not self.recieved_ack:
                 self.failed_heartbeats += 1
 
-            if self.failed_heartbeats > 2:
                 await self.close()
-                await self.connect()
+                await self.resume()
                 return
 
             await self.heartbeat()
