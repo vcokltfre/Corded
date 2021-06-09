@@ -87,6 +87,8 @@ class Shard:
     async def close(self):
         """Gracefully close the connection."""
 
+        self.failed_heartbeats = 0
+
         if self.ws and not self.ws.closed:
             await self.ws.close()
 
