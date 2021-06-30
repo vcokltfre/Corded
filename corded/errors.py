@@ -5,7 +5,7 @@ class CordedError(Exception):
     pass
 
 
-## HTTP Errors
+# HTTP Errors
 
 
 class HTTPError(CordedError):

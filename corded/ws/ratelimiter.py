@@ -23,7 +23,7 @@ SOFTWARE.
 """
 
 from time import time
-from asyncio import AbstractEventLoop, Semaphore, sleep
+from asyncio import AbstractEventLoop, Semaphore
 
 
 class Ratelimiter:

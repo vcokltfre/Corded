@@ -22,12 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass
 class GetGateway:
     url: str
+
 
 @dataclass
 class SessionStartLimit:
@@ -35,6 +36,7 @@ class SessionStartLimit:
     remaining: int
     reset_after: int
     max_concurrency: int
+
 
 @dataclass
 class GetGatewayBot:

@@ -23,14 +23,22 @@ SOFTWARE.
 """
 
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import Union, List
+from typing import List
 
 from .http import HTTPClient
 from .ws import GatewayClient
 
 
 class CordedClient:
-    def __init__(self, token: str, intents: int, *, shard_ids: int = None, shard_count: int = None, loop: AbstractEventLoop = None):
+    def __init__(
+        self,
+        token: str,
+        intents: int,
+        *,
+        shard_ids: int = None,
+        shard_count: int = None,
+        loop: AbstractEventLoop = None
+    ):
         """A combined client that can make HTTP requests and connect to the gateway.
 
         Args:

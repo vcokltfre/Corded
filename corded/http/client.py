@@ -24,10 +24,20 @@ SOFTWARE.
 
 from asyncio import AbstractEventLoop, get_event_loop, sleep
 from aiohttp import ClientSession, ClientResponse
+from json import JSONDecodeError
 from typing import Literal
 
 from corded.constants import API_URL, VERSION
-from corded.errors import HTTPError, BadRequest, Unauthorized, Forbidden, NotFound, PayloadTooLarge, TooManyRequests, DiscordServerError
+from corded.errors import (
+    HTTPError,
+    BadRequest,
+    Unauthorized,
+    Forbidden,
+    NotFound,
+    PayloadTooLarge,
+    TooManyRequests,
+    DiscordServerError
+)
 
 from .ratelimiter import Ratelimiter
 from .route import Route
@@ -88,13 +98,21 @@ class HTTPClient:
         if format == "auto":
             try:
                 return await response.json()
-            except:
+            except JSONDecodeError:
                 return await response.text()
         if format == "response":
             return response
         raise ValueError("Format must be one of 'json', 'text', 'auto', 'raw'")
 
-    async def request(self, method: str, route: Route, *, attempts: int = None, expect: ResponseFormat = "json", **params):
+    async def request(
+        self,
+        method: str,
+        route: Route,
+        *,
+        attempts: int = None,
+        expect: ResponseFormat = "json",
+        **params
+    ):
         """Make a Discord API request.
 
         Args:
@@ -124,7 +142,9 @@ class HTTPClient:
             headers = response.headers
 
             rl_reset_after = float(headers.get("X-RateLimit-Reset-After", 0))
-            rl_bucket_remaining = int(headers.get("X-RateLimit-Remaining", 1))  # Default here is for non authenticated (and hence non ratelimited) endpoints
+
+            # Default here is for non authenticated (and hence non ratelimited) endpoints
+            rl_bucket_remaining = int(headers.get("X-RateLimit-Remaining", 1))
             rl_sleep_for = 0
 
             if status != 429 and rl_bucket_remaining == 0:

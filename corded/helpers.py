@@ -28,6 +28,7 @@ from typing import Union
 
 INT = compile(r"^\d+$")
 
+
 def int_types(data: Union[dict, list, int, str, bool, float]):
     if isinstance(data, (int, str, bool, float)):
         if isinstance(data, str) and INT.match(data):
@@ -48,9 +49,9 @@ class BitField:
 
     def __setitem__(self, bit: int, state: bool):
         if state:
-            self.value |= (1<<bit)
+            self.value |= (1 << bit)
         else:
-            self.value &=~ (1<<bit)
+            self.value &= ~(1 << bit)
 
     def __int__(self):
         return self.value

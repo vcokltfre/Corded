@@ -33,7 +33,15 @@ from corded.objects.partials import GetGatewayBot, SessionStartLimit
 
 
 class GatewayClient:
-    def __init__(self, http, intents: int, shard_ids: list = None, shard_count: int = None, *, loop: AbstractEventLoop = None):
+    def __init__(
+        self,
+        http,
+        intents: int,
+        shard_ids: list = None,
+        shard_count: int = None,
+        *,
+        loop: AbstractEventLoop = None
+    ):
         """A client to connect to the Discord gateway.
 
         Args:
