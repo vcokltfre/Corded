@@ -23,7 +23,8 @@ SOFTWARE.
 """
 
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import List
+from inspect import iscoroutinefunction
+from typing import Callable, List
 
 from .http import HTTPClient
 from .ws import GatewayClient
@@ -59,13 +60,20 @@ class CordedClient:
 
         self.loop.run_until_complete(self.gateway.start())
 
+    def add_listener(self, events: List[str], callback: Callable):
+        """Add an event listener to the client."""
+
+        if not iscoroutinefunction(callback):
+            raise TypeError(f"callback must be a coroutine function, not {callback.__class__.__qualname__}")
+
+        if not events:
+            events = [callback.__name__]
+        for event in events:
+            self.gateway.listeners[event].append(callback)
+
     def on(self, *events: List[str]):
         def wrapper(func):
-            nonlocal events
-            if not events:
-                events = [func.__name__]
-            for event in events:
-                self.gateway.listeners[event].append(func)
+            self.add_listener(events, func)
             return func
         return wrapper
 
