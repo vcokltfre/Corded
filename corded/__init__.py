@@ -1,4 +1,4 @@
-from .http import HTTPClient, Route
+from .http import File, HTTPClient, Route
 from .ws import GatewayClient, Shard
 from .errors import (
     CordedError,
@@ -17,6 +17,7 @@ from .client import CordedClient
 from .helpers import BitField
 
 __all__ = (
+    File,
     HTTPClient,
     Route,
     CordedError,
