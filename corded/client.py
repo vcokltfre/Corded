@@ -24,19 +24,20 @@ SOFTWARE.
 
 from asyncio import AbstractEventLoop, get_event_loop
 from inspect import iscoroutinefunction
-from typing import Callable, List
+from typing import Callable, List, Union, Tuple
 
 from .http import HTTPClient
 from .ws import GatewayClient
+from .objects import Intents
 
 
 class CordedClient:
     def __init__(
         self,
         token: str,
-        intents: int,
+        intents: Union[Intents, int],
         *,
-        shard_ids: int = None,
+        shard_ids: List[int] = None,
         shard_count: int = None,
         loop: AbstractEventLoop = None
     ):
@@ -44,12 +45,12 @@ class CordedClient:
 
         Args:
             token (str): The token to use for API requests and connecting.
-            intents (int): The intents to use while connecting to the gateway.
+            intents (Union[Intents, int]): The intents to use while connecting to the gateway.
             loop (AbstractEventLoop, optional): The even loop to use. Defaults to asyncio.get_event_loop.
         """
-
+        
+        self.intents = intents.value if isinstance(intents, Intents) else intents
         self.token = token
-        self.intents = intents
         self.loop = loop or get_event_loop()
 
         self.http = HTTPClient(token, loop=self.loop)
@@ -60,12 +61,11 @@ class CordedClient:
 
         self.loop.run_until_complete(self.gateway.start())
 
-    def add_listener(self, events: List[str], callback: Callable):
+    def add_listener(self, events: Union[List[str], Tuple[List[str], ...]], callback: Callable):
         """Add an event listener to the client."""
 
         if not iscoroutinefunction(callback):
             raise TypeError(f"callback must be a coroutine function, not {callback.__class__.__qualname__}")
-
         if not events:
             events = [callback.__name__]
         for event in events:
