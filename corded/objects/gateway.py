@@ -26,6 +26,10 @@ class GatewayEvent:
         return (self.t or f"op_{self.op}").lower()
 
 class Intents:
+    """Represents a discord intents flag
+    Allows for easier passing of intents to the gateway 
+    
+    """
     value: int = 0
     valid: Dict[str, int] = {
         "guilds": 1 << 0,
@@ -54,12 +58,22 @@ class Intents:
 
     @classmethod
     def all(cls):
+        """A classmethod that will enable all intents including privileged ones
+
+        Returns:
+            Intents: The Intents instance that was created
+        """
         intents = cls.__new__(cls)
         super(Intents, cls).__setattr__(intents, "value", (1 << sum(cls.valid.values()).bit_length()) - 1)
         return intents
 
     @classmethod
     def default(cls):
+        """A classmethod that will enable all intents excluding privileged ones
+
+        Returns:
+            Intents: The Intents instance that was created
+        """
         intents = cls.__new__(cls)
         super(Intents, cls).__setattr__(intents, "value", (1 << sum(cls.valid.values()).bit_length()) - 259)
         return intents
