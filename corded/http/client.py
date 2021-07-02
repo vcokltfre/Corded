@@ -23,7 +23,7 @@ SOFTWARE.
 """
 
 from asyncio import AbstractEventLoop, get_event_loop, sleep
-from aiohttp import ClientSession, ClientResponse
+from aiohttp import ClientSession, ClientResponse, FormData
 from json import JSONDecodeError
 from typing import Literal
 
@@ -39,6 +39,7 @@ from corded.errors import (
     DiscordServerError
 )
 
+from .file import File
 from .ratelimiter import Ratelimiter
 from .route import Route
 
@@ -134,6 +135,22 @@ class HTTPClient:
             request_headers["X-Audit-Log-Reason"] = params.pop("reason")
 
         for i in range(attempts):
+            if files := params.pop("files", []):
+                if i:
+                    for file in files:
+                        file.seek(0)
+                formdata = FormData()
+
+                for fn, file in enumerate(files):
+                    if not isinstance(file, File):
+                        raise TypeError(f"files must be a list of corded.File, not {file.__class__.__qualname__}")
+                    formdata.add_field(f"file_{fn}", file.file, filename=file.filename)
+
+                for k, v in params.pop("json", {}).items():
+                    formdata.add_field(k, v)
+
+                params["data"] = formdata
+
             await self.ratelimiter.acquire(bucket)
 
             response = await self.session.request(method, self.url + route.route, headers=request_headers, **params)
