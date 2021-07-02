@@ -25,9 +25,37 @@ class GatewayEvent:
     def dispatch_name(self):
         return (self.t or f"op_{self.op}").lower()
 
+from dataclasses import dataclass
+from typing import Any, Literal, Optional, Union, Dict
+
+from corded.helpers import int_types
+import corded
+
+
+Direction = Union[Literal["inbound"], Literal["outbound"]]
+
+
+@dataclass
+class GatewayEvent:
+    shard: "corded.ws.shard.Shard"
+    direction: Direction
+    op: int
+    d: Optional[Any]
+    s: Optional[int] = None
+    t: Optional[str] = None
+
+    @property
+    def typed_data(self):
+        return int_types(self.d) if self.d else None
+
+    @property
+    def dispatch_name(self):
+        return (self.t or f"op_{self.op}").lower()
+
+
 class Intents:
     """Represents a discord intents flag
-    Allows for easier passing of intents to the gateway 
+    Allows for easier passing of intents to the gateway
     
     """
     value: int = 0
@@ -48,11 +76,19 @@ class Intents:
         "direct_message_reactions": 1 << 13,
         "direct_message_typing": 1 << 14
     }
-
-    def __setattr__(self, name, value):
+    
+    def __init__(self):
+        for flag in self.valid.keys():
+            super(Intents, self).__setattr__(flag, False)
+            
+    def __setattr__(self, name: str, value: bool) -> None:
         if name in self.valid.keys():
-            super(Intents, self).__setattr__("value", self.value + self.valid[name])
-            super(Intents, self).__setattr__(name, value)
+            if value is True:
+                super(Intents, self).__setattr__("value", self.value + self.valid[name])
+                super(Intents, self).__setattr__(name, value)
+            elif value is False and getattr(self, name) is True:
+                super(Intents, self).__setattr__("value", self.value - self.valid[name])
+                super(Intents, self).__setattr__(name, value)
         else:
             raise Exception(f"{name}, is not a valid intent")
 
@@ -64,7 +100,9 @@ class Intents:
             Intents: The Intents instance that was created
         """
         intents = cls.__new__(cls)
-        super(Intents, cls).__setattr__(intents, "value", (1 << sum(cls.valid.values()).bit_length()) - 1)
+        for flag in cls.valid.keys():
+            cls.__setattr__(intents, flag, True)
+            
         return intents
 
     @classmethod
@@ -75,5 +113,10 @@ class Intents:
             Intents: The Intents instance that was created
         """
         intents = cls.__new__(cls)
-        super(Intents, cls).__setattr__(intents, "value", (1 << sum(cls.valid.values()).bit_length()) - 259)
+        for flag in cls.valid.keys():
+            cls.__setattr__(intents, flag, True)
+            
+        intents.guild_members = False
+        intents.guild_presences = False
+        
         return intents
