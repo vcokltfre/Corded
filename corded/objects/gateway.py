@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Any, Literal, Optional, Union, Dict
+from typing import Any, Literal, Optional, Union, Dict, Tuple
 
 from corded.helpers import int_types
 import corded
@@ -65,26 +67,26 @@ class Intents:
         else:
             raise Exception(f"{name}, is not a valid intent")
         
-    def __iter__(self):
+    def __iter__(self) -> Tuple[str, Any]:
         for key, value in self.__dict__.items():
             if key == "value":
                 continue
             yield (key, value)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.value)
-
-    def __repr__(self):
+        
+    def __repr__(self) -> str:
         return f"<{self.__class__.__name__} value={self.value}>"
     
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return isinstance(other, self.__class__) and self.value == other.value
     
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         return not self.__eq__(other)
 
     @classmethod
-    def all(cls):
+    def all(cls) -> Intents:
         """A classmethod that will enable all intents including privileged ones
 
         Returns:
@@ -97,7 +99,7 @@ class Intents:
         return intents
 
     @classmethod
-    def default(cls):
+    def default(cls) -> Intents:
         """A classmethod that will enable all intents excluding privileged ones
 
         Returns:
