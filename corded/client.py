@@ -23,7 +23,7 @@ SOFTWARE.
 """
 
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import List
+from typing import List, Union
 
 from .http import HTTPClient
 from .ws import GatewayClient
@@ -34,7 +34,7 @@ class CordedClient:
     def __init__(
         self,
         token: str,
-        intents: Intents,
+        intents: Union[Intents, int],
         *,
         shard_ids: int = None,
         shard_count: int = None,
@@ -44,12 +44,12 @@ class CordedClient:
 
         Args:
             token (str): The token to use for API requests and connecting.
-            intents (int): The intents to use while connecting to the gateway.
+            intents (Intents/int): The intents to use while connecting to the gateway.
             loop (AbstractEventLoop, optional): The even loop to use. Defaults to asyncio.get_event_loop.
         """
-
+        
+        self.intents = intents.value if isinstance(intents, Intents) else intents
         self.token = token
-        self.intents = intents.value
         self.loop = loop or get_event_loop()
 
         self.http = HTTPClient(token, loop=self.loop)

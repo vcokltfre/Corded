@@ -64,6 +64,24 @@ class Intents:
                 super(Intents, self).__setattr__(name, value)
         else:
             raise Exception(f"{name}, is not a valid intent")
+        
+    def __iter__(self):
+        for key, value in self.__dict__.items():
+            if key == "value":
+                continue
+            yield (key, value)
+
+    def __hash__(self):
+        return hash(self.value)
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__} value={self.value}>"
+    
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.value == other.value
+    
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     @classmethod
     def all(cls):
