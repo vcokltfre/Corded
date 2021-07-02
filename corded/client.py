@@ -27,13 +27,14 @@ from typing import List
 
 from .http import HTTPClient
 from .ws import GatewayClient
+from .objects import Intents
 
 
 class CordedClient:
     def __init__(
         self,
         token: str,
-        intents: int,
+        intents: Intents,
         *,
         shard_ids: int = None,
         shard_count: int = None,
@@ -48,7 +49,7 @@ class CordedClient:
         """
 
         self.token = token
-        self.intents = intents
+        self.intents = intents.value
         self.loop = loop or get_event_loop()
 
         self.http = HTTPClient(token, loop=self.loop)

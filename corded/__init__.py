@@ -12,7 +12,7 @@ from .errors import (
     DiscordServerError,
 )
 from .constants import VERSION as __version__
-from .objects import Object, GatewayEvent
+from .objects import Object, GatewayEvent, Intents
 from .client import CordedClient
 from .helpers import BitField
 
@@ -34,5 +34,6 @@ __all__ = (
     Shard,
     CordedClient,
     BitField,
+    Intents,
     __version__,
 )
