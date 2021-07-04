@@ -84,6 +84,14 @@ class GatewayClient:
         for middleware in self.dispatch_middleware:
             event = await middleware(event)
 
+            if not event:
+                return
+
+            if not isinstance(event, GatewayEvent):
+                raise TypeError(
+                    f"Type of event returned by middleware {middleware.__name__}, {event.__class__.__qualname__}, is not a valid GatewayEvent."
+                )
+
         all_listeners = [
             *self.listeners[event.dispatch_name],
             *(
