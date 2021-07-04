@@ -110,41 +110,42 @@ class Shard:
     async def identify(self):
         """Sends an identfy payload to the gateway."""
 
-        await self.send({
-            "op": GatewayOps.IDENTIFY,
-            "d": {
-                "token": self.parent.http.token,
-                "properties": {
-                    "$os": platform,
-                    "$browser": "Corded",
-                    "$device": "Corded",
+        await self.send(
+            {
+                "op": GatewayOps.IDENTIFY,
+                "d": {
+                    "token": self.parent.http.token,
+                    "properties": {
+                        "$os": platform,
+                        "$browser": "Corded",
+                        "$device": "Corded",
+                    },
+                    "intents": self.parent.intents,
+                    "shard": [self.id, self.parent.shard_count],
                 },
-                "intents": self.parent.intents,
-                "shard": [self.id, self.parent.shard_count],
             }
-        })
+        )
 
     async def resume(self):
         """Resume an existing connection with the gateway."""
 
-        await self.send({
-            "op": GatewayOps.RESUME,
-            "d": {
-                "token": self.parent.http.token,
-                "session_id": self.session,
-                "seq": self.seq,
+        await self.send(
+            {
+                "op": GatewayOps.RESUME,
+                "d": {
+                    "token": self.parent.http.token,
+                    "session_id": self.session,
+                    "seq": self.seq,
+                },
             }
-        })
+        )
 
     async def heartbeat(self):
         """Send a heartbeat to the gateway."""
 
         self.last_heartbeat_send = time()
 
-        await self.send({
-            "op": GatewayOps.HEARTBEAT,
-            "d": self.seq
-        })
+        await self.send({"op": GatewayOps.HEARTBEAT, "d": self.seq})
 
         if self.seq:
             self.seq += 1
@@ -159,7 +160,9 @@ class Shard:
         op = data["op"]
 
         if op == GatewayOps.HELLO:
-            self.pacemaker = self.loop.create_task(self.start_pacemaker(data["d"]["heartbeat_interval"]))
+            self.pacemaker = self.loop.create_task(
+                self.start_pacemaker(data["d"]["heartbeat_interval"])
+            )
             await self.identify()
         elif op == GatewayOps.ACK:
             self.latency = time() - self.last_heartbeat_send
@@ -176,14 +179,14 @@ class Shard:
             CloseCodes.AUTHENTICATION_FAILED,
             CloseCodes.INVALID_API_VERSION,
             CloseCodes.INVALID_INTENTS,
-            CloseCodes.DISALLOWED_INTENTS
+            CloseCodes.DISALLOWED_INTENTS,
         ]:
             await self.parent.panic(code)
 
         if code in [
             CloseCodes.INVALID_SEQ,
             CloseCodes.RATE_LIMITED,
-            CloseCodes.SESSION_TIMEOUT
+            CloseCodes.SESSION_TIMEOUT,
         ]:
             self.session = None
 

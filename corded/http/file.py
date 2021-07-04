@@ -24,6 +24,7 @@ SOFTWARE.
 
 from io import IOBase
 
+
 class File:
     def __init__(self, file: IOBase, filename: str) -> None:
         """A file object representing Discord files.

@@ -39,7 +39,7 @@ class CordedClient:
         *,
         shard_ids: List[int] = None,
         shard_count: int = None,
-        loop: AbstractEventLoop = None
+        loop: AbstractEventLoop = None,
     ):
         """A combined client that can make HTTP requests and connect to the gateway.
 
@@ -48,24 +48,30 @@ class CordedClient:
             intents (Union[Intents, int]): The intents to use while connecting to the gateway.
             loop (AbstractEventLoop, optional): The even loop to use. Defaults to asyncio.get_event_loop.
         """
-        
+
         self.intents = intents.value if isinstance(intents, Intents) else intents
         self.token = token
         self.loop = loop or get_event_loop()
 
         self.http = HTTPClient(token, loop=self.loop)
-        self.gateway = GatewayClient(self.http, self.intents, shard_ids, shard_count, loop=self.loop)
+        self.gateway = GatewayClient(
+            self.http, self.intents, shard_ids, shard_count, loop=self.loop
+        )
 
     def start(self):
         """Make a blocking call to start the Gateway connection."""
 
         self.loop.run_until_complete(self.gateway.start())
 
-    def add_listener(self, events: Union[List[str], Tuple[List[str], ...]], callback: Callable):
+    def add_listener(
+        self, events: Union[List[str], Tuple[List[str], ...]], callback: Callable
+    ):
         """Add an event listener to the client."""
 
         if not iscoroutinefunction(callback):
-            raise TypeError(f"callback must be a coroutine function, not {callback.__class__.__qualname__}")
+            raise TypeError(
+                f"callback must be a coroutine function, not {callback.__class__.__qualname__}"
+            )
         if not events:
             events = [callback.__name__]
         for event in events:
@@ -75,6 +81,7 @@ class CordedClient:
         def wrapper(func):
             self.add_listener(events, func)
             return func
+
         return wrapper
 
     def middleware(self, func):

@@ -26,8 +26,4 @@ from .base import Object
 from .gateway import GatewayEvent, Intents
 
 
-__all__ = (
-    Object,
-    GatewayEvent,
-    Intents
-)
+__all__ = (Object, GatewayEvent, Intents)

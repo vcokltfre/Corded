@@ -31,8 +31,9 @@ class GatewayEvent:
 class Intents:
     """Represents a discord intents flag
     Allows for easier passing of intents to the gateway
-    
+
     """
+
     value: int = 0
     valid: Dict[str, int] = {
         "guilds": 1 << 0,
@@ -49,13 +50,13 @@ class Intents:
         "guild_message_typing": 1 << 11,
         "direct_messages": 1 << 12,
         "direct_message_reactions": 1 << 13,
-        "direct_message_typing": 1 << 14
+        "direct_message_typing": 1 << 14,
     }
-    
+
     def __init__(self):
         for flag in self.valid.keys():
             super(Intents, self).__setattr__(flag, False)
-            
+
     def __setattr__(self, name: str, value: bool) -> None:
         if name in self.valid.keys():
             if value is True:
@@ -66,7 +67,7 @@ class Intents:
                 super(Intents, self).__setattr__(name, value)
         else:
             raise Exception(f"{name}, is not a valid intent")
-        
+
     def __iter__(self) -> Tuple[str, Any]:
         for key, value in self.__dict__.items():
             if key == "value":
@@ -75,13 +76,13 @@ class Intents:
 
     def __hash__(self) -> int:
         return hash(self.value)
-        
+
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} value={self.value}>"
-    
+
     def __eq__(self, other) -> bool:
         return isinstance(other, self.__class__) and self.value == other.value
-    
+
     def __ne__(self, other) -> bool:
         return not self.__eq__(other)
 
@@ -95,7 +96,7 @@ class Intents:
         intents = cls.__new__(cls)
         for flag in cls.valid.keys():
             cls.__setattr__(intents, flag, True)
-            
+
         return intents
 
     @classmethod
@@ -108,8 +109,8 @@ class Intents:
         intents = cls.__new__(cls)
         for flag in cls.valid.keys():
             cls.__setattr__(intents, flag, True)
-            
+
         intents.guild_members = False
         intents.guild_presences = False
-        
+
         return intents

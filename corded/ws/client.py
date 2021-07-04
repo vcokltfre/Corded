@@ -40,7 +40,7 @@ class GatewayClient:
         shard_ids: list = None,
         shard_count: int = None,
         *,
-        loop: AbstractEventLoop = None
+        loop: AbstractEventLoop = None,
     ):
         """A client to connect to the Discord gateway.
 
@@ -95,11 +95,11 @@ class GatewayClient:
         all_listeners = [
             *self.listeners[event.dispatch_name],
             *(
-                self.listeners["gateway_send"] if
-                event.direction == "outbound" else
-                self.listeners["gateway_receive"]
+                self.listeners["gateway_send"]
+                if event.direction == "outbound"
+                else self.listeners["gateway_receive"]
             ),
-            *self.listeners["*"]
+            *self.listeners["*"],
         ]
 
         for listener in all_listeners:

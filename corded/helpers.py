@@ -49,7 +49,7 @@ class BitField:
 
     def __setitem__(self, bit: int, state: bool):
         if state:
-            self.value |= (1 << bit)
+            self.value |= 1 << bit
         else:
             self.value &= ~(1 << bit)
 

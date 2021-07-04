@@ -36,7 +36,7 @@ from corded.errors import (
     NotFound,
     PayloadTooLarge,
     TooManyRequests,
-    DiscordServerError
+    DiscordServerError,
 )
 
 from .file import File
@@ -112,7 +112,7 @@ class HTTPClient:
         *,
         attempts: int = None,
         expect: ResponseFormat = "json",
-        **params
+        **params,
     ):
         """Make a Discord API request.
 
@@ -143,7 +143,9 @@ class HTTPClient:
 
                 for fn, file in enumerate(files):
                     if not isinstance(file, File):
-                        raise TypeError(f"files must be a list of corded.File, not {file.__class__.__qualname__}")
+                        raise TypeError(
+                            f"files must be a list of corded.File, not {file.__class__.__qualname__}"
+                        )
                     formdata.add_field(f"file_{fn}", file.file, filename=file.filename)
 
                 for k, v in params.pop("json", {}).items():
@@ -153,7 +155,9 @@ class HTTPClient:
 
             await self.ratelimiter.acquire(bucket)
 
-            response = await self.session.request(method, self.url + route.route, headers=request_headers, **params)
+            response = await self.session.request(
+                method, self.url + route.route, headers=request_headers, **params
+            )
 
             status = response.status
             headers = response.headers
@@ -210,9 +214,7 @@ class HTTPClient:
             "max_msg_size": 0,
             "timeout": 60,
             "autoclose": False,
-            "headers": {
-                "User-Agent": self.headers["User-Agent"]
-            },
+            "headers": {"User-Agent": self.headers["User-Agent"]},
         }
 
         return await self.session.ws_connect(url, **args)
