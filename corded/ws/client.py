@@ -65,7 +65,7 @@ class GatewayClient:
         self.dispatch_middleware = []
 
     async def panic(self, code) -> None:
-        print(code)  # TODO: Handle panic properly
+        raise SystemExit(f"Shard error code: {code}")
 
     async def start(self) -> None:
         gateway: GetGatewayBot = await self.http.get_gateway_bot()
@@ -77,7 +77,8 @@ class GatewayClient:
             await limiter.wait()
             self.loop.create_task(shard.connect())
 
-        self.loop.run_forever()
+        while True:
+            await sleep(0)
 
     async def dispatch(self, event: GatewayEvent) -> None:
         for middleware in self.dispatch_middleware:
