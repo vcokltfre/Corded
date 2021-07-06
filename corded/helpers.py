@@ -28,8 +28,10 @@ from typing import Union
 
 INT = compile(r"^\d+$")
 
+Types = Union[dict, list, int, str, bool, float]
 
-def int_types(data: Union[dict, list, int, str, bool, float]):
+
+def int_types(data: Types) -> Types:
     if isinstance(data, (int, str, bool, float)):
         if isinstance(data, str) and INT.match(data):
             return int(data)
@@ -41,17 +43,17 @@ def int_types(data: Union[dict, list, int, str, bool, float]):
 
 
 class BitField:
-    def __init__(self, value: int):
+    def __init__(self, value: int) -> None:
         self.value = value
 
-    def __getitem__(self, bit: int):
+    def __getitem__(self, bit: int) -> int:
         return self.value >> bit & 1
 
-    def __setitem__(self, bit: int, state: bool):
+    def __setitem__(self, bit: int, state: bool) -> None:
         if state:
             self.value |= 1 << bit
         else:
             self.value &= ~(1 << bit)
 
-    def __int__(self):
+    def __int__(self) -> int:
         return self.value

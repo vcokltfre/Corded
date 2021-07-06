@@ -41,7 +41,7 @@ class GatewayClient:
         shard_count: int = None,
         *,
         loop: AbstractEventLoop = None,
-    ):
+    ) -> None:
         """A client to connect to the Discord gateway.
 
         Args:
@@ -64,10 +64,10 @@ class GatewayClient:
         self.listeners = defaultdict(list)
         self.dispatch_middleware = []
 
-    async def panic(self, code):
+    async def panic(self, code) -> None:
         print(code)  # TODO: Handle panic properly
 
-    async def start(self):
+    async def start(self) -> None:
         gateway: GetGatewayBot = await self.http.get_gateway_bot()
         limit: SessionStartLimit = gateway.session_start_limit
 
@@ -77,10 +77,9 @@ class GatewayClient:
             await limiter.wait()
             self.loop.create_task(shard.connect())
 
-        while True:
-            await sleep(0)
+        self.loop.run_forever()
 
-    async def dispatch(self, event: GatewayEvent):
+    async def dispatch(self, event: GatewayEvent) -> None:
         for middleware in self.dispatch_middleware:
             event = await middleware(event)
 
@@ -105,8 +104,8 @@ class GatewayClient:
         for listener in all_listeners:
             self.loop.create_task(listener(event))
 
-    async def dispatch_recv(self, shard: Shard, data: dict):
+    async def dispatch_recv(self, shard: Shard, data: dict) -> None:
         await self.dispatch(GatewayEvent(shard, "inbound", **data))
 
-    async def dispatch_send(self, shard: Shard, data: dict):
+    async def dispatch_send(self, shard: Shard, data: dict) -> None:
         await self.dispatch(GatewayEvent(shard, "outbound", **data))

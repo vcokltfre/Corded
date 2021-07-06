@@ -9,7 +9,7 @@ class CordedError(Exception):
 
 
 class HTTPError(CordedError):
-    def __init__(self, response: ClientResponse):
+    def __init__(self, response: ClientResponse) -> None:
         self.response = response
 
 

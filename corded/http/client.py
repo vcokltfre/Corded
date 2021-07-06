@@ -25,7 +25,7 @@ SOFTWARE.
 from asyncio import AbstractEventLoop, get_event_loop, sleep
 from aiohttp import ClientSession, ClientResponse, FormData
 from json import JSONDecodeError
-from typing import Literal
+from typing import Any, Literal
 
 from corded.constants import API_URL, VERSION
 from corded.errors import (
@@ -50,7 +50,7 @@ ResponseFormat = Literal["raw", "text", "json", "auto", "response"]
 
 
 class HTTPClient:
-    def __init__(self, token: str, *, url: str = None, loop: AbstractEventLoop = None):
+    def __init__(self, token: str, *, url: str = None, loop: AbstractEventLoop = None) -> None:
         """An HTTP client to make Discord API requests, observing ratelimits.
 
         Args:
@@ -82,7 +82,7 @@ class HTTPClient:
         }
 
     @staticmethod
-    async def response_as(response: ClientResponse, format: ResponseFormat = "json"):
+    async def response_as(response: ClientResponse, format: ResponseFormat = "json") -> Any:
         """Return a ClientResponse in a given format.
 
         Args:
@@ -113,7 +113,7 @@ class HTTPClient:
         attempts: int = None,
         expect: ResponseFormat = "json",
         **params,
-    ):
+    ) -> Any:
         """Make a Discord API request.
 
         Args:
@@ -219,7 +219,7 @@ class HTTPClient:
 
         return await self.session.ws_connect(url, **args)
 
-    async def close(self):
+    async def close(self)  -> None:
         await self.session.close()
 
     async def get_gateway(self) -> p.GetGateway:

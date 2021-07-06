@@ -24,7 +24,7 @@ SOFTWARE.
 
 
 class Route:
-    def __init__(self, path: str, **params):
+    def __init__(self, path: str, **params) -> None:
         """Represents a Discord API route, used for ratelimit handling.
 
         Args:

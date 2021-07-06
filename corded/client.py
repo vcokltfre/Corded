@@ -40,7 +40,7 @@ class CordedClient:
         shard_ids: List[int] = None,
         shard_count: int = None,
         loop: AbstractEventLoop = None,
-    ):
+    ) -> None:
         """A combined client that can make HTTP requests and connect to the gateway.
 
         Args:
@@ -58,14 +58,14 @@ class CordedClient:
             self.http, self.intents, shard_ids, shard_count, loop=self.loop
         )
 
-    def start(self):
+    def start(self) -> None:
         """Make a blocking call to start the Gateway connection."""
 
         self.loop.run_until_complete(self.gateway.start())
 
     def add_listener(
         self, events: Union[List[str], Tuple[List[str], ...]], callback: Callable
-    ):
+    ) -> None:
         """Add an event listener to the client."""
 
         if not iscoroutinefunction(callback):
@@ -77,13 +77,13 @@ class CordedClient:
         for event in events:
             self.gateway.listeners[event].append(callback)
 
-    def on(self, *events: List[str]):
+    def on(self, *events: List[str]) -> Callable:
         def wrapper(func):
             self.add_listener(events, func)
             return func
 
         return wrapper
 
-    def middleware(self, func):
+    def middleware(self, func) -> Callable:
         self.gateway.dispatch_middleware.append(func)
         return func

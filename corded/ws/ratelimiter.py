@@ -27,7 +27,7 @@ from asyncio import AbstractEventLoop, Semaphore
 
 
 class Ratelimiter:
-    def __init__(self, rate: int, per: int, loop: AbstractEventLoop):
+    def __init__(self, rate: int, per: int, loop: AbstractEventLoop) -> None:
         """A ratelimiter to prevent making too many requests to the gateway.
 
         Args:
@@ -43,7 +43,7 @@ class Ratelimiter:
 
         self.lock = Semaphore(rate)
 
-    async def wait(self):
+    async def wait(self) -> None:
         await self.lock.acquire()
 
         self.loop.call_later(self.per, self.lock.release)

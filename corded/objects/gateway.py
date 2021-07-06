@@ -20,11 +20,11 @@ class GatewayEvent:
     t: Optional[str] = None
 
     @property
-    def typed_data(self):
+    def typed_data(self) -> Any:
         return int_types(self.d) if self.d else None
 
     @property
-    def dispatch_name(self):
+    def dispatch_name(self) -> str:
         return (self.t or f"op_{self.op}").lower()
 
 
@@ -53,7 +53,7 @@ class Intents:
         "direct_message_typing": 1 << 14,
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         for flag in self.valid.keys():
             super(Intents, self).__setattr__(flag, False)
 

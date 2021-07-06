@@ -33,7 +33,7 @@ from corded.objects.constants import GatewayOps, GatewayCloseCodes as CloseCodes
 
 
 class Shard:
-    def __init__(self, id: int, parent, loop: AbstractEventLoop):
+    def __init__(self, id: int, parent, loop: AbstractEventLoop) -> None:
         """A shard to connect to the Discord gateway to receive and send events.
 
         Args:
@@ -66,12 +66,12 @@ class Shard:
     def __repr__(self) -> str:
         return f"<Shard id={self.id} seq={self.seq}>"
 
-    async def spawn_ws(self):
+    async def spawn_ws(self) -> None:
         """Spawn the websocket connection to the gateway."""
 
         self.ws = await self.parent.http.spawn_ws(self.url)
 
-    async def connect(self):
+    async def connect(self) -> None:
         """Create a connection to the Discord gateway."""
 
         if not self.url:
@@ -84,7 +84,7 @@ class Shard:
 
         await self.start_reader()
 
-    async def close(self):
+    async def close(self) -> None:
         """Gracefully close the connection."""
 
         self.failed_heartbeats = 0
@@ -95,7 +95,7 @@ class Shard:
         if self.pacemaker and not self.pacemaker.cancelled():
             self.pacemaker.cancel()
 
-    async def send(self, data: dict):
+    async def send(self, data: dict) -> None:
         """Send data to the gateway.
 
         Args:
@@ -107,7 +107,7 @@ class Shard:
         self.loop.create_task(self.parent.dispatch_send(self, data))
         await self.ws.send_json(data)
 
-    async def identify(self):
+    async def identify(self) -> None:
         """Sends an identfy payload to the gateway."""
 
         await self.send(
@@ -126,7 +126,7 @@ class Shard:
             }
         )
 
-    async def resume(self):
+    async def resume(self) -> None:
         """Resume an existing connection with the gateway."""
 
         await self.send(
@@ -140,7 +140,7 @@ class Shard:
             }
         )
 
-    async def heartbeat(self):
+    async def heartbeat(self) -> None:
         """Send a heartbeat to the gateway."""
 
         self.last_heartbeat_send = time()
@@ -152,7 +152,7 @@ class Shard:
         else:
             self.seq = 1
 
-    async def dispatch(self, data: dict):
+    async def dispatch(self, data: dict) -> None:
         """Dispatch events."""
 
         await self.parent.dispatch_recv(self, data)
@@ -171,7 +171,7 @@ class Shard:
             await self.close()
             await self.connect()
 
-    async def handle_disconnect(self, code: int):
+    async def handle_disconnect(self, code: int) -> None:
         """Handle the gateway disconnecting correctly."""
 
         if code in [
@@ -198,7 +198,7 @@ class Shard:
         await self.close()
         await self.connect()
 
-    async def start_reader(self):
+    async def start_reader(self) -> None:
         """Start a loop constantly reading from the gateway."""
 
         async for message in self.ws:
@@ -214,7 +214,7 @@ class Shard:
 
         await self.handle_disconnect(self.ws.close_code)
 
-    async def start_pacemaker(self, delay: float):
+    async def start_pacemaker(self, delay: float) -> None:
         """A loop to constantly heartbeat at an interval given by the gateway."""
 
         delay = delay / 1000

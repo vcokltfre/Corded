@@ -26,7 +26,7 @@ from asyncio import Lock, Event, AbstractEventLoop, get_event_loop
 
 
 class Ratelimiter:
-    def __init__(self, loop: AbstractEventLoop = None):
+    def __init__(self, loop: AbstractEventLoop = None) -> None:
         """A ratelimit handler for API requests.
 
         Args:
@@ -67,7 +67,7 @@ class Ratelimiter:
 
         self.loop.call_later(after, lock.release)
 
-    def lock_globally(self, duration: float):
+    def lock_globally(self, duration: float) -> None:
         """Lock the global ratelimit lock for a set duration.
 
         Args:
