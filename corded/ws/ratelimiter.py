@@ -38,9 +38,6 @@ class Ratelimiter:
         self.per = per
         self.loop = loop
 
-        self.current = 0
-        self.current_t = time()
-
         self.lock = Semaphore(rate)
 
     async def wait(self) -> None:
