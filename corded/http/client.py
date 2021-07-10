@@ -50,7 +50,9 @@ ResponseFormat = Literal["raw", "text", "json", "auto", "response"]
 
 
 class HTTPClient:
-    def __init__(self, token: str, *, url: str = None, loop: AbstractEventLoop = None) -> None:
+    def __init__(
+        self, token: str, *, url: str = None, loop: AbstractEventLoop = None
+    ) -> None:
         """An HTTP client to make Discord API requests, observing ratelimits.
 
         Args:
@@ -82,7 +84,9 @@ class HTTPClient:
         }
 
     @staticmethod
-    async def response_as(response: ClientResponse, format: ResponseFormat = "json") -> Any:
+    async def response_as(
+        response: ClientResponse, format: ResponseFormat = "json"
+    ) -> Any:
         """Return a ClientResponse in a given format.
 
         Args:
@@ -219,7 +223,7 @@ class HTTPClient:
 
         return await self.session.ws_connect(url, **args)
 
-    async def close(self)  -> None:
+    async def close(self) -> None:
         await self.session.close()
 
     async def get_gateway(self) -> p.GetGateway:
