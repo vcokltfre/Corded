@@ -150,6 +150,7 @@ class HTTPClient:
                         raise TypeError(
                             f"files must be a list of corded.File, not {file.__class__.__qualname__}"
                         )
+                    # TODO: use the file name and check for dupes
                     formdata.add_field(f"file_{fn}", file.file, filename=file.filename)
 
                 for k, v in params.pop("json", {}).items():
