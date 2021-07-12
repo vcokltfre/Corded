@@ -28,6 +28,7 @@ from time import time
 
 from aiohttp import WSMessage, WSMsgType
 
+import corded
 from corded.objects.constants import GatewayCloseCodes as CloseCodes
 from corded.objects.constants import GatewayOps
 
@@ -35,7 +36,7 @@ from .ratelimiter import Ratelimiter
 
 
 class Shard:
-    def __init__(self, id: int, parent, loop: AbstractEventLoop) -> None:
+    def __init__(self, id: int, parent: "corded.ws.GatewayClient", loop: AbstractEventLoop) -> None:
         """A shard to connect to the Discord gateway to receive and send events.
 
         Args:
