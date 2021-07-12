@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from asyncio import Lock, Event, AbstractEventLoop, get_event_loop
+from asyncio import AbstractEventLoop, Event, Lock, get_event_loop
 
 
 class Ratelimiter:

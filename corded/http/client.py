@@ -23,28 +23,27 @@ SOFTWARE.
 """
 
 from asyncio import AbstractEventLoop, get_event_loop, sleep
-from aiohttp import ClientSession, ClientResponse, FormData
 from json import JSONDecodeError
 from typing import Any, Literal
 
+from aiohttp import ClientResponse, ClientSession, FormData
+
+import corded.objects.partials as p
 from corded.constants import API_URL, VERSION
 from corded.errors import (
-    HTTPError,
     BadRequest,
-    Unauthorized,
+    DiscordServerError,
     Forbidden,
+    HTTPError,
     NotFound,
     PayloadTooLarge,
     TooManyRequests,
-    DiscordServerError,
+    Unauthorized,
 )
 
 from .file import File
 from .ratelimiter import Ratelimiter
 from .route import Route
-
-import corded.objects.partials as p
-
 
 ResponseFormat = Literal["raw", "text", "json", "auto", "response"]
 

@@ -25,11 +25,11 @@ SOFTWARE.
 from asyncio import AbstractEventLoop, get_event_loop, sleep
 from collections import defaultdict
 
-from .shard import Shard
-from .ratelimiter import Ratelimiter
-
 from corded.objects.gateway import GatewayEvent
 from corded.objects.partials import GetGatewayBot, SessionStartLimit
+
+from .ratelimiter import Ratelimiter
+from .shard import Shard
 
 
 class GatewayClient:

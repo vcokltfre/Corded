@@ -1,6 +1,5 @@
 from enum import IntFlag
 
-
 AUDIT_LOG_EVENTS = {
     1: "GUILD_UPDATE",
     10: "CHANNEL_CREATE",

@@ -24,11 +24,11 @@ SOFTWARE.
 
 from asyncio import AbstractEventLoop, get_event_loop
 from inspect import iscoroutinefunction
-from typing import Callable, List, Union, Tuple
+from typing import Callable, List, Tuple, Union
 
 from .http import HTTPClient
-from .ws import GatewayClient
 from .objects import Intents
+from .ws import GatewayClient
 
 
 class CordedClient:

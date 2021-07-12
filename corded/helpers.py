@@ -25,7 +25,6 @@ SOFTWARE.
 from re import compile
 from typing import Union
 
-
 INT = compile(r"^\d+$")
 
 Types = Union[dict, list, int, str, bool, float]

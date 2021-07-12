@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Literal, Optional, Union, Dict, Tuple
+from typing import Any, Dict, Literal, Optional, Tuple, Union
 
-from corded.helpers import int_types
 import corded
-
+from corded.helpers import int_types
 
 Direction = Union[Literal["inbound"], Literal["outbound"]]
 

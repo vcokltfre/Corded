@@ -22,14 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from aiohttp import WSMessage, WSMsgType
-from asyncio import AbstractEventLoop, sleep, Task
+from asyncio import AbstractEventLoop, Task, sleep
 from sys import platform
 from time import time
 
-from .ratelimiter import Ratelimiter
+from aiohttp import WSMessage, WSMsgType
 
-from corded.objects.constants import GatewayOps, GatewayCloseCodes as CloseCodes
+from corded.objects.constants import GatewayCloseCodes as CloseCodes
+from corded.objects.constants import GatewayOps
+
+from .ratelimiter import Ratelimiter
 
 
 class Shard:
