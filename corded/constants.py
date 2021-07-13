@@ -1,2 +1,2 @@
-API_URL = "https://discord.com/api/v9"
+API_URL = "https://discord.com/api/v8"
 VERSION = "1.3.8"
