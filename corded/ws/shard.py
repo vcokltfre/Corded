@@ -59,7 +59,6 @@ class Shard:
         self.heartbeat_task = None
         self.last_heartbeat_send = None
         self.recieved_ack = True
-        self.failed_heartbeats = 0
         self.latency = None
 
         self.pacemaker: Task = None
@@ -80,12 +79,13 @@ class Shard:
         if not self.url:
             self.url = (await self.parent.http.get_gateway()).url
 
-        await self.spawn_ws()
+        while True:
+            await self.spawn_ws()
 
-        if self.session:
-            await self.resume()
+            if self.session:
+                await self.resume()
 
-        await self.start_reader()
+            await self.start_reader()
 
     async def close(self) -> None:
         """Gracefully close the connection."""
@@ -224,11 +224,7 @@ class Shard:
 
         while True:
             if not self.recieved_ack:
-                self.failed_heartbeats += 1
-
-                await self.close()
-                await self.resume()
-                return
+                return await self.close()
 
             await self.heartbeat()
             self.recieved_ack = False
