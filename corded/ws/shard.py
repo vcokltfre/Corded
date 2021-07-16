@@ -108,7 +108,10 @@ class Shard:
         await self.send_limiter.wait()
 
         self.loop.create_task(self.parent.dispatch_send(self, data))
-        await self.ws.send_json(data)
+        try:
+            await self.ws.send_json(data)
+        except ConnectionResetError:
+            exit(1)
 
     async def identify(self) -> None:
         """Sends an identfy payload to the gateway."""
