@@ -108,6 +108,21 @@ class HTTPClient:
             return response
         raise ValueError("Format must be one of 'json', 'text', 'auto', 'raw'")
 
+    async def get(self, route: Route, *, attempts: int = None, expect: ResponseFormat = "json", **params) -> Any:
+        await self.request("GET", route, attempts=attempts, expect=expect, **params)
+
+    async def post(self, route: Route, *, attempts: int = None, expect: ResponseFormat = "json", **params) -> Any:
+        await self.request("POST", route, attempts=attempts, expect=expect, **params)
+
+    async def put(self, route: Route, *, attempts: int = None, expect: ResponseFormat = "json", **params) -> Any:
+        await self.request("PUT", route, attempts=attempts, expect=expect, **params)
+
+    async def patch(self, route: Route, *, attempts: int = None, expect: ResponseFormat = "json", **params) -> Any:
+        await self.request("PATCH", route, attempts=attempts, expect=expect, **params)
+
+    async def delete(self, route: Route, *, attempts: int = None, expect: ResponseFormat = "json", **params) -> Any:
+        await self.request("DELETE", route, attempts=attempts, expect=expect, **params)
+
     async def request(
         self,
         method: str,
