@@ -77,7 +77,7 @@ class CordedClient:
         for event in events:
             self.gateway.listeners[event].append(callback)
 
-    def on(self, *events: List[str]) -> Callable:
+    def on(self, *events: str) -> Callable:
         def wrapper(func):
             self.add_listener(events, func)
             return func
