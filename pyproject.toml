@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "corded"
-version = "1.4.2"
+version = "1.5.0"
 description = "A lightweight, extensible client library for Discord bots"
 authors = ["vcokltfre <vcokltfre@gmail.com>"]
 license = "MIT"
