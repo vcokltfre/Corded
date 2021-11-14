@@ -78,7 +78,7 @@ class GatewayClient:
             self.loop.create_task(shard.connect())
 
         while True:
-            await sleep(0)
+            await sleep(1)
 
     async def dispatch(self, event: GatewayEvent) -> None:
         for middleware in self.dispatch_middleware:
