@@ -79,13 +79,23 @@ class Shard:
         if not self.url:
             self.url = (await self.parent.http.get_gateway()).url
 
+        backoff = 0.1
+
         while True:
-            await self.spawn_ws()
+            try:
+                await sleep(backoff)
+                await self.spawn_ws()
 
-            if self.session:
-                await self.resume()
+                if self.session:
+                    await self.resume()
 
-            await self.start_reader()
+                backoff = 0.1
+
+                await self.start_reader()
+            except Exception as e:
+                print(f"Shard {self.id} raised an exception during execution: {e}")
+                if backoff < 5:
+                    backoff *= 2
 
     async def close(self) -> None:
         """Gracefully close the connection."""
